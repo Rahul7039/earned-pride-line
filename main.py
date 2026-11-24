@@ -16,12 +16,25 @@ LINE = (
 )
 
 
+def validate_line(line: str) -> str:
+    """Return the line if it is a single non-empty line, else raise."""
+    if not line.strip():
+        raise ValueError("line must not be empty")
+    if "\n" in line:
+        raise ValueError("line must be a single line")
+    return line
+
+
+def write_line(path: str, line: str) -> None:
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(line + "\n")
+
+
 def main() -> None:
     output_dir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "entry.txt")
-    with open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write(LINE + "\n")
+    write_line(path, validate_line(LINE))
 
 
 if __name__ == "__main__":
